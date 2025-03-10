@@ -29,7 +29,6 @@ tower-service = { workspace = true }
 futures-utils-wasm = { workspace = true }
 http = { workspace = true }
 wasmtime = { workspace = true }
-wavs-types = { workspace = true }
 
 [lib]
 crate-type = ["rlib", "cdylib"]

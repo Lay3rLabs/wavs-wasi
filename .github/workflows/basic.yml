@@ -18,11 +18,6 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: Add deploy key to check out private repo
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -60,11 +55,6 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
-
-      - name: Add deploy key to check out private repo
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-            ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1

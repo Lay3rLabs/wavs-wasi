@@ -34,4 +34,3 @@ wasmtime = { version = "29.0.1", features = [
     "runtime",
     "std",
 ] }
-wavs-types = { git = "ssh://git@github.com/Lay3rLabs/WAVS.git" }
