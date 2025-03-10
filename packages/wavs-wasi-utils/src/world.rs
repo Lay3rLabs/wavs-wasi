@@ -4,7 +4,7 @@ use wasmtime::component::bindgen;
 
 bindgen!({
     world: "layer-trigger-world",
-    path: "../sdk/wit",
+    path: "../../sdk/wit",
     async: {
         only_imports: []
     }
