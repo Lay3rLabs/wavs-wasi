@@ -10,10 +10,13 @@ concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
     cancel-in-progress: true
 
+env:
+    GO_VERSION: 1.21
+
 jobs:
   test:
-    name: Test Suite
-    runs-on: ubuntu-latest
+    name: Wavs Test Suite
+    runs-on: linux-8-core
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -23,7 +26,6 @@ jobs:
         with:
           profile: minimal
           toolchain: 1.84.0
-          target: wasm32-wasi
           override: true
 
       - name: Set up cargo cache
