@@ -1,4 +1,3 @@
-/*************  ✨ Codeium Command 🌟  *************/
 /// Decode a given `log_data` into a typed event `T`.
 ///
 /// The log data comes from the WIT bindings at https://wa.dev/wavs:worker#layer-types-eth-event-log-data
