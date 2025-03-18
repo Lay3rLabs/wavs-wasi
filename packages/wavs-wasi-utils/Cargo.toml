@@ -1,7 +1,7 @@
 [package]
 name = "wavs-wasi-utils"
-version = "0.3.0"
-description = "WAVS WASI Chain helpers"
+version = "0.4.0-alpha.1"
+description = "WAVS WASI utils"
 authors.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -28,7 +28,6 @@ cfg-if = { workspace = true }
 tower-service = { workspace = true }
 futures-utils-wasm = { workspace = true }
 http = { workspace = true }
-wasmtime = { workspace = true }
 
 [lib]
 crate-type = ["rlib", "cdylib"]
