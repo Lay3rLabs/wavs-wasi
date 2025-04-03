@@ -1,2 +1,2 @@
 # wavs-wasi
-wasi-utils and wit files for easy WIT import
+wasi-utils and wit files for easy MIT-license import
