@@ -151,3 +151,10 @@ world layer-trigger-world {
 
   export run: func(trigger-action: trigger-action) -> result<option<list<u8>>, string>;
 }
+
+// Adding the TEE support world as an optional component
+world tee {
+  export register-routes: func();
+  export load-from-ledger: func(cmd: string);
+  export insert-in-ledger: func(cmd: string);
+}
