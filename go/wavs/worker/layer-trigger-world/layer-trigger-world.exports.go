@@ -6,10 +6,10 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// Exports represents the caller-defined exports from "wavs:worker/layer-trigger-world@0.3.0".
+// Exports represents the caller-defined exports from "wavs:worker/layer-trigger-world@0.4.0-alpha.2".
 var Exports struct {
 	// Run represents the caller-defined, exported function "run".
 	//
-	//	run: func(trigger-action: trigger-action) -> result<option<list<u8>>, string>
-	Run func(triggerAction TriggerAction) (result cm.Result[OptionListU8Shape, cm.Option[cm.List[uint8]], string])
+	//	run: func(trigger-action: trigger-action) -> result<option<wasm-response>, string>
+	Run func(triggerAction TriggerAction) (result cm.Result[OptionWasmResponseShape, cm.Option[WasmResponse], string])
 }

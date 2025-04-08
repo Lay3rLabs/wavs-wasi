@@ -6,7 +6,7 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.3.0".
+// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.4.0-alpha.2".
 
 //go:wasmimport host get-eth-chain-config
 //go:noescape
