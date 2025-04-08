@@ -7,16 +7,19 @@ import (
 
 // TriggerResult is the return type for wavs trigger world Run function
 // an alias of wavs Exports Run() result type
-type TriggerResult = cm.Result[wavs.OptionWasmResponseShape, cm.Option[cm.List[uint8]], string]
+type TriggerResult = cm.Result[wavs.OptionWasmResponseShape, cm.Option[wavs.WasmResponse], string]
 
 // Ok (alias) returns an Ok response of type Some
-func Ok(resp []byte) TriggerResult {
-	return cm.OK[TriggerResult](cm.Some(cm.NewList(&resp[0], len(resp))))
+func Ok(resp []byte, ordering cm.Option[uint64]) TriggerResult {
+	return cm.OK[TriggerResult](cm.Some(wavs.WasmResponse{
+		Payload:  cm.NewList(&resp[0], len(resp)),
+		Ordering: ordering,
+	}))
 }
 
 // OkNone (alias) returns an Ok response of type None
 func OkNone() TriggerResult {
-	return cm.OK[TriggerResult](cm.None[cm.List[uint8]]())
+	return cm.OK[TriggerResult](cm.None[wavs.WasmResponse]())
 }
 
 // Err (alias) returns an Err response of type string
