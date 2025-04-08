@@ -41,11 +41,9 @@ wkg wit build
 # move into the golang directory
 cd go/
 
-export WAVS_PACKAGE=wavs:worker@0.3.0
-
 # generate the Go/ bindings
 # if `error: error executing wasm-tools: module closed with exit_code(1)`, set WAVS_PACKAGE
-wit-bindgen-go generate -o . ../${WAVS_PACKAGE}.wasm
+wit-bindgen-go generate -o . ../wavs:worker@0.4.0-alpha.2.wasm
 
 go mod tidy
 ```

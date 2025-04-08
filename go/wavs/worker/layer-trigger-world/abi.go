@@ -7,8 +7,8 @@ import (
 	"unsafe"
 )
 
-// OptionListU8Shape is used for storage in variant or result types.
-type OptionListU8Shape struct {
+// OptionWasmResponseShape is used for storage in variant or result types.
+type OptionWasmResponseShape struct {
 	_     cm.HostLayout
-	shape [unsafe.Sizeof(cm.Option[cm.List[uint8]]{})]byte
+	shape [unsafe.Sizeof(cm.Option[WasmResponse]{})]byte
 }

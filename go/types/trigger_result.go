@@ -7,7 +7,7 @@ import (
 
 // TriggerResult is the return type for wavs trigger world Run function
 // an alias of wavs Exports Run() result type
-type TriggerResult = cm.Result[wavs.OptionListU8Shape, cm.Option[cm.List[uint8]], string]
+type TriggerResult = cm.Result[wavs.OptionWasmResponseShape, cm.Option[cm.List[uint8]], string]
 
 // Ok (alias) returns an Ok response of type Some
 func Ok(resp []byte) TriggerResult {

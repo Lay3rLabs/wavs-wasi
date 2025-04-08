@@ -6,11 +6,11 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.3.0".
+// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.4.0-alpha.2".
 
 //go:wasmexport run
 //export run
-func wasmexport_Run(triggerAction *TriggerAction) (result *cm.Result[OptionListU8Shape, cm.Option[cm.List[uint8]], string]) {
+func wasmexport_Run(triggerAction *TriggerAction) (result *cm.Result[OptionWasmResponseShape, cm.Option[WasmResponse], string]) {
 	triggerAction_ := *triggerAction
 	result_ := Exports.Run(triggerAction_)
 	result = &result_
