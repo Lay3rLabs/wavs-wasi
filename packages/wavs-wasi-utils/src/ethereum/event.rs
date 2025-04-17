@@ -35,5 +35,5 @@ pub fn decode_event_log_data_raw<T: alloy_sol_types::SolEvent>(
     let log_data =
         LogData::new(topics, data).ok_or_else(|| anyhow!("failed to create log data"))?;
 
-    T::decode_log_data(&log_data, false).map_err(|e| anyhow!("failed to decode event: {}", e))
+    T::decode_log_data(&log_data).map_err(|e| anyhow!("failed to decode event: {}", e))
 }
