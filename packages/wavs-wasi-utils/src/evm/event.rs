@@ -1,6 +1,6 @@
 /// Decode a given `log_data` into a typed event `T`.
 ///
-/// The log data comes from the WIT bindings at https://wa.dev/wavs:worker#layer-types-eth-event-log-data
+/// The log data comes from the WIT bindings at https://wa.dev/wavs:worker#layer-types-evm-event-log-data
 /// * `topics` should be a Vec<Vec<u8>>`.
 /// * `data` should be a `Vec<u8>`.
 ///
@@ -21,7 +21,7 @@ macro_rules! decode_event_log_data {
             .map(|t| $crate::ethereum::alloy_primitives::FixedBytes::<32>::from_slice(t))
             .collect();
 
-        $crate::ethereum::event::decode_event_log_data_raw(topics, $log_data.data.into())
+        $crate::evm::event::decode_event_log_data_raw(topics, $log_data.data.into())
     }};
 }
 

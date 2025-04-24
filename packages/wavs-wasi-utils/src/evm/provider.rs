@@ -28,28 +28,28 @@ use wstd::{
 
 cfg_if::cfg_if! {
     if #[cfg(target_arch = "wasm32")] {
-        pub fn new_eth_provider<N: Network>(endpoint: String) -> RootProvider<N> {
-            let client = WasiEthClient::new(endpoint);
+        pub fn new_evm_provider<N: Network>(endpoint: String) -> RootProvider<N> {
+            let client = WasiEvmClient::new(endpoint);
             let is_local = client.is_local();
             RootProvider::new(RpcClient::new(client, is_local))
         }
 
         #[derive(Clone)]
-        pub struct WasiEthClient {
+        pub struct WasiEvmClient {
             pub endpoint: String,
         }
 
-        impl WasiEthClient {
+        impl WasiEvmClient {
             pub fn new(endpoint: String) -> Self {
                 Self { endpoint }
             }
         }
 
         // prior art, cloudflare does this trick too: https://github.com/cloudflare/workers-rs/blob/38af58acc4e54b29c73336c1720188f3c3e86cc4/worker/src/send.rs#L32
-        unsafe impl Sync for WasiEthClient {}
-        unsafe impl Send for WasiEthClient {}
+        unsafe impl Sync for WasiEvmClient {}
+        unsafe impl Send for WasiEvmClient {}
 
-        impl TransportConnect for WasiEthClient {
+        impl TransportConnect for WasiEvmClient {
             fn is_local(&self) -> bool {
                 guess_local_url(self.endpoint.as_str())
             }
@@ -59,7 +59,7 @@ cfg_if::cfg_if! {
             }
         }
 
-        impl Service<RequestPacket> for WasiEthClient {
+        impl Service<RequestPacket> for WasiEvmClient {
             type Response = ResponsePacket;
             type Error = TransportError;
             type Future = TransportFut<'static>;
@@ -98,7 +98,7 @@ cfg_if::cfg_if! {
         }
     } else {
         // not used, just for making the compiler happy
-        pub fn new_eth_provider<N: Network>(_endpoint: String) -> RootProvider {
+        pub fn new_evm_provider<N: Network>(_endpoint: String) -> RootProvider {
             unimplemented!()
         }
     }

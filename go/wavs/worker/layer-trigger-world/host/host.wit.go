@@ -8,10 +8,10 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// EthChainConfig represents the type alias "host#eth-chain-config".
+// EvmChainConfig represents the type alias "host#evm-chain-config".
 //
-// See [layertypes.EthChainConfig] for more information.
-type EthChainConfig = layertypes.EthChainConfig
+// See [layertypes.EvmChainConfig] for more information.
+type EvmChainConfig = layertypes.EvmChainConfig
 
 // CosmosChainConfig represents the type alias "host#cosmos-chain-config".
 //
@@ -23,14 +23,14 @@ type CosmosChainConfig = layertypes.CosmosChainConfig
 // See [layertypes.LogLevel] for more information.
 type LogLevel = layertypes.LogLevel
 
-// GetEthChainConfig represents the imported function "get-eth-chain-config".
+// GetEvmChainConfig represents the imported function "get-evm-chain-config".
 //
-//	get-eth-chain-config: func(chain-name: string) -> option<eth-chain-config>
+//	get-evm-chain-config: func(chain-name: string) -> option<evm-chain-config>
 //
 //go:nosplit
-func GetEthChainConfig(chainName string) (result cm.Option[EthChainConfig]) {
+func GetEvmChainConfig(chainName string) (result cm.Option[EvmChainConfig]) {
 	chainName0, chainName1 := cm.LowerString(chainName)
-	wasmimport_GetEthChainConfig((*uint8)(chainName0), (uint32)(chainName1), &result)
+	wasmimport_GetEvmChainConfig((*uint8)(chainName0), (uint32)(chainName1), &result)
 	return
 }
 
