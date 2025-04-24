@@ -16,6 +16,10 @@ func wasmimport_GetEvmChainConfig(chainName0 *uint8, chainName1 uint32, result *
 //go:noescape
 func wasmimport_GetCosmosChainConfig(chainName0 *uint8, chainName1 uint32, result *cm.Option[CosmosChainConfig])
 
+//go:wasmimport host config-var
+//go:noescape
+func wasmimport_ConfigVar(key0 *uint8, key1 uint32, result *cm.Option[string])
+
 //go:wasmimport host log
 //go:noescape
 func wasmimport_Log(level0 uint32, message0 *uint8, message1 uint32)

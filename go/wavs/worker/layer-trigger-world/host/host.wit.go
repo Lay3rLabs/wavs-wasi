@@ -45,6 +45,17 @@ func GetCosmosChainConfig(chainName string) (result cm.Option[CosmosChainConfig]
 	return
 }
 
+// ConfigVar represents the imported function "config-var".
+//
+//	config-var: func(key: string) -> option<string>
+//
+//go:nosplit
+func ConfigVar(key string) (result cm.Option[string]) {
+	key0, key1 := cm.LowerString(key)
+	wasmimport_ConfigVar((*uint8)(key0), (uint32)(key1), &result)
+	return
+}
+
 // Log represents the imported function "log".
 //
 //	log: func(level: log-level, message: string)

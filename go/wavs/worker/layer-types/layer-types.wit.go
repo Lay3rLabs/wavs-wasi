@@ -255,7 +255,7 @@ type TriggerConfig struct {
 //		log: evm-event-log-data,
 //		block-height: u64,
 //	}
-type TriggerDataEthContractEvent struct {
+type TriggerDataEvmContractEvent struct {
 	_               cm.HostLayout   `json:"-"`
 	ContractAddress EvmAddress      `json:"contract-address"`
 	ChainName       string          `json:"chain-name"`
