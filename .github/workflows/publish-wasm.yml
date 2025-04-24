@@ -1,0 +1,41 @@
+name: Publish WASM to wa.dev
+
+on:
+  push:
+    tags:
+      - '[0-9]+.[0-9]+.[0-9]+*'
+
+jobs:
+  publish-wasm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Rust and Cargo
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Cache Cargo binaries
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: cargo-bin-${{ runner.os }}
+
+      - name: Install wkg
+        run: cargo install wkg
+
+      - name: Build wit
+        run: wkg wit build
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
+
+      - name: Publish wasm to wa.dev
+        run: |
+          version="${{ steps.get_version.outputs.version }}"
+          wkg publish "wavs:worker@$version.wasm"

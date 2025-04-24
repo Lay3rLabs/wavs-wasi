@@ -2,7 +2,7 @@ name: Publish wavs-wasi-utils to crates.io
 on:
   push:
     tags:
-      - 'v*'
+      - '[0-9]+.[0-9]+.[0-9]+*'
 
 env:
   CRATE_NAME: wavs-wasi-utils
@@ -31,7 +31,7 @@ jobs:
           VERSION=$(cargo read-manifest --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml | jq -r .version)
           
           # Ensure the tag name matches the version from Cargo.toml
-          if [ "v$VERSION" != "${{ github.ref_name }}" ]; then
+          if [ "$VERSION" != "${{ github.ref_name }}" ]; then
               echo "Error: Tag name '${{ github.ref_name }}' does not match version '$VERSION' from Cargo.toml"
               exit 1
           fi
