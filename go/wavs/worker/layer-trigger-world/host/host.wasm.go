@@ -6,15 +6,19 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.4.0-alpha.2".
+// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.4.0-alpha.6".
 
-//go:wasmimport host get-eth-chain-config
+//go:wasmimport host get-evm-chain-config
 //go:noescape
-func wasmimport_GetEthChainConfig(chainName0 *uint8, chainName1 uint32, result *cm.Option[EthChainConfig])
+func wasmimport_GetEvmChainConfig(chainName0 *uint8, chainName1 uint32, result *cm.Option[EvmChainConfig])
 
 //go:wasmimport host get-cosmos-chain-config
 //go:noescape
 func wasmimport_GetCosmosChainConfig(chainName0 *uint8, chainName1 uint32, result *cm.Option[CosmosChainConfig])
+
+//go:wasmimport host config-var
+//go:noescape
+func wasmimport_ConfigVar(key0 *uint8, key1 uint32, result *cm.Option[string])
 
 //go:wasmimport host log
 //go:noescape
