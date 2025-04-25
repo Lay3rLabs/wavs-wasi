@@ -28,25 +28,35 @@ jobs:
         id: version
         shell: bash
         run: |
+          # Extract version from Cargo.toml
           VERSION=$(cargo read-manifest --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml | jq -r .version)
+          # Remove 'v' prefix from tag name for comparison
           TAG_VERSION="${{ github.ref_name#v }}"
+
+          # Verify tag matches Cargo.toml version
           if [ "$VERSION" != "$TAG_VERSION" ]; then
-              echo "Error: Tag version 'v$TAG_VERSION' does not match Cargo.toml version '$VERSION'"
+              echo "Error: Tag version '${{ github.ref_name }}' does not match Cargo.toml version '$VERSION'"
               exit 1
           fi
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if crate exists
         id: crate_exists
         shell: bash
         run: |
-          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" https://crates.io/api/v1/crates/${{ env.CRATE_NAME }}/${{ steps.version.outputs.version }})
+          # Check if this version already exists on crates.io
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            https://crates.io/api/v1/crates/${{ env.CRATE_NAME }}/${{ steps.version.outputs.version }})
+
           if [ "$HTTP_STATUS" = "200" ]; then
             echo "exists=true" >> $GITHUB_OUTPUT
+            echo "Crate ${{ env.CRATE_NAME }} version ${{ steps.version.outputs.version }} already exists"
           elif [ "$HTTP_STATUS" = "404" ]; then
             echo "exists=false" >> $GITHUB_OUTPUT
+            echo "Crate ${{ env.CRATE_NAME }} version ${{ steps.version.outputs.version }} not found - OK to publish"
           else
-            echo "Error: Unexpected status $HTTP_STATUS"
+            echo "Error: Unexpected HTTP status $HTTP_STATUS when checking crate"
             exit 1
           fi
 
@@ -92,12 +102,7 @@ jobs:
       - name: Build wit
         run: wkg wit build
 
-      - name: Extract version from tag
-        id: get_version
-        run: |
-          echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
-
       - name: Publish wasm to wa.dev
         run: |
-          version="${{ steps.get_version.outputs.version }}"
+          version="${{ github.ref_name#v }}"
           wkg publish "wavs:worker@$version.wasm"
