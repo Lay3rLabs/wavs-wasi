@@ -99,6 +99,18 @@ jobs:
       - name: Install wkg
         run: cargo install wkg
 
+      - name: Configure registry for wkg
+        run: wkg config --default-registry warg.wa.dev
+
+      - name: Create warg config directory and write config.json and authentication flat-files
+        # wkg cannot set the warg configuration for authentication at this time.
+        # This is a workaround to set the warg configuration without installing the `warg-cli`.
+        run: |
+          mkdir -p ~/.config/warg/keyring
+          echo '{"homeUrl":"https://warg.wa.dev/","keys":["default"],"keyringAuth":true,"ignoreFederationHints":false,"disableAutoAcceptFederationHints":false,"disableAutoPackageInit":fals
+          echo '${{ secrets.WA_DEV_AUTH_TOKEN }}' > ~/.config/warg/keyring/service=warg-auth-token%3Awarg.wa.dev\&user=warg.wa.dev
+          echo '${{ secrets.WA_DEV_SIGNING_KEY }}' > ~/.config/warg/keyring/service=warg-signing-key\&user=default
+
       - name: Build wit
         run: wkg wit build
 
