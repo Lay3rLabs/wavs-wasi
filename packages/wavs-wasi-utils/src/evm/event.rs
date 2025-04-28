@@ -80,8 +80,8 @@ mod tests {
         let decoded_event: MyEvent = decode_event_log_data!(log).expect("decode failed");
 
         // Check values match
-        assert_eq!(decoded_event.id, id.into());
+        assert_eq!(decoded_event.id, id);
         assert_eq!(decoded_event.user.0, user);
-        assert_eq!(decoded_event.amount, amount.into());
+        assert_eq!(decoded_event.amount, amount);
     }
 }
