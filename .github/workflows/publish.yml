@@ -90,12 +90,6 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: Cache Cargo binaries
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/bin
-          key: cargo-bin-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
-
       - name: Install wkg
         run: cargo install wkg
 
@@ -108,8 +102,8 @@ jobs:
         run: |
           mkdir -p ~/.config/warg/keyring
           echo '{"homeUrl":"https://warg.wa.dev/","keys":["default"],"keyringAuth":true,"ignoreFederationHints":false,"disableAutoAcceptFederationHints":false,"disableAutoPackageInit":false,"disableInteractive":false,"keyringBackend":"flat-file"}' > ~/.config/warg/config.json
-          echo '${{ secrets.WA_DEV_AUTH_TOKEN }}' > ~/.config/warg/keyring/service=warg-auth-token%3Awarg.wa.dev\&user=warg.wa.dev
-          echo '${{ secrets.WA_DEV_SIGNING_KEY }}' > ~/.config/warg/keyring/service=warg-signing-key\&user=default
+          echo "${{ secrets.WA_DEV_AUTH_TOKEN }}" > ~/.config/warg/keyring/service=warg-auth-token%3Awarg.wa.dev\&user=warg.wa.dev
+          echo "${{ secrets.WA_DEV_SIGNING_KEY }}" > ~/.config/warg/keyring/service=warg-signing-key\&user=default
 
       - name: Build wit
         run: wkg wit build
