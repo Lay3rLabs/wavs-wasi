@@ -31,7 +31,7 @@ jobs:
           # Extract version from Cargo.toml
           VERSION=$(cargo read-manifest --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml | jq -r .version)
           # Remove 'v' prefix from tag name for comparison
-          TAG_VERSION="${{ github.ref_name#v }}"
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
 
           # Verify tag matches Cargo.toml version
           if [ "$VERSION" != "$TAG_VERSION" ]; then
@@ -116,5 +116,5 @@ jobs:
 
       - name: Publish wasm to wa.dev
         run: |
-          version="${{ github.ref_name#v }}"
+          version="${GITHUB_REF_NAME#v}"
           wkg publish "wavs:worker@$version.wasm"
