@@ -1,8 +1,9 @@
-name: Publish wavs-wasi-utils to crates.io
+name: Publish Tag
+
 on:
   push:
     tags:
-      - 'v*'
+      - '^v\d+\.\d+\.\d+(-[a-zA-Z]+\.\d+)?$'
 
 env:
   CRATE_NAME: wavs-wasi-utils
@@ -15,7 +16,7 @@ jobs:
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v4
-      
+
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -27,53 +28,45 @@ jobs:
         id: version
         shell: bash
         run: |
-          # Extract version from Cargo.toml using cargo read-manifest and jq
+          # Extract version from Cargo.toml
           VERSION=$(cargo read-manifest --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml | jq -r .version)
-          
-          # Ensure the tag name matches the version from Cargo.toml
-          if [ "v$VERSION" != "${{ github.ref_name }}" ]; then
-              echo "Error: Tag name '${{ github.ref_name }}' does not match version '$VERSION' from Cargo.toml"
+          # Remove 'v' prefix from tag name for comparison
+          TAG_VERSION="${{ github.ref_name#v }}"
+
+          # Verify tag matches Cargo.toml version
+          if [ "$VERSION" != "$TAG_VERSION" ]; then
+              echo "Error: Tag version '${{ github.ref_name }}' does not match Cargo.toml version '$VERSION'"
               exit 1
           fi
-          
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Check if crate exists
         id: crate_exists
         shell: bash
         run: |
-          # Get the HTTP status code when checking if the crate exists
-          # We expect either 200 (exists) or 404 (doesn't exist)
+          # Check if this version already exists on crates.io
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
             https://crates.io/api/v1/crates/${{ env.CRATE_NAME }}/${{ steps.version.outputs.version }})
-          
-          # Handle status codes appropriately
+
           if [ "$HTTP_STATUS" = "200" ]; then
-            # Crate exists
             echo "exists=true" >> $GITHUB_OUTPUT
             echo "Crate ${{ env.CRATE_NAME }} version ${{ steps.version.outputs.version }} already exists"
           elif [ "$HTTP_STATUS" = "404" ]; then
-            # Crate doesn't exist - we're good to publish
             echo "exists=false" >> $GITHUB_OUTPUT
             echo "Crate ${{ env.CRATE_NAME }} version ${{ steps.version.outputs.version }} not found - OK to publish"
           else
-            # Any other status code is unexpected and should fail the workflow
-            echo "Error: Received unexpected HTTP status $HTTP_STATUS when checking if crate exists"
+            echo "Error: Unexpected HTTP status $HTTP_STATUS when checking crate"
             exit 1
           fi
 
-      - name: Display version information
-        run: |
-          echo "Publishing version: ${{ steps.version.outputs.version }}"
-          echo "Crate exists on crates.io: ${{ steps.crate_exists.outputs.exists }}"
-      
       - name: Run cargo package
         if: steps.crate_exists.outputs.exists == 'false'
         uses: actions-rs/cargo@v1
         with:
           command: package
           args: --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml
-      
+
       - name: Publish to crates.io
         if: steps.crate_exists.outputs.exists == 'false'
         uses: actions-rs/cargo@v1
@@ -82,3 +75,46 @@ jobs:
         with:
           command: publish
           args: --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml
+
+  publish_wasm:
+    name: Publish WASM to wa.dev
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+
+      - name: Cache Cargo binaries
+        uses: actions/cache@v3
+        with:
+          path: ~/.cargo/bin
+          key: cargo-bin-${{ runner.os }}-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Install wkg
+        run: cargo install wkg
+
+      - name: Configure registry for wkg
+        run: wkg config --default-registry warg.wa.dev
+
+      - name: Create warg config directory and write config.json and authentication flat-files
+        # wkg cannot set the warg configuration for authentication at this time.
+        # This is a workaround to set the warg configuration without installing the `warg-cli`.
+        run: |
+          mkdir -p ~/.config/warg/keyring
+          echo '{"homeUrl":"https://warg.wa.dev/","keys":["default"],"keyringAuth":true,"ignoreFederationHints":false,"disableAutoAcceptFederationHints":false,"disableAutoPackageInit":false,"disableInteractive":false,"keyringBackend":"flat-file"}' > ~/.config/warg/config.json
+          echo '${{ secrets.WA_DEV_AUTH_TOKEN }}' > ~/.config/warg/keyring/service=warg-auth-token%3Awarg.wa.dev\&user=warg.wa.dev
+          echo '${{ secrets.WA_DEV_SIGNING_KEY }}' > ~/.config/warg/keyring/service=warg-signing-key\&user=default
+
+      - name: Build wit
+        run: wkg wit build
+
+      - name: Publish wasm to wa.dev
+        run: |
+          version="${{ github.ref_name#v }}"
+          wkg publish "wavs:worker@$version.wasm"
