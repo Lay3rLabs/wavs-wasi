@@ -7,10 +7,10 @@ import (
 	"unsafe"
 )
 
-// TriggerSourceCronShape is used for storage in variant or result types.
-type TriggerSourceCronShape struct {
+// BlockIntervalSourceShape is used for storage in variant or result types.
+type BlockIntervalSourceShape struct {
 	_     cm.HostLayout
-	shape [unsafe.Sizeof(TriggerSourceCron{})]byte
+	shape [unsafe.Sizeof(BlockIntervalSource{})]byte
 }
 
 // TriggerDataCosmosContractEventShape is used for storage in variant or result types.
