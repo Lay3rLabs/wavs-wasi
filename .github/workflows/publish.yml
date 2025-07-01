@@ -47,6 +47,7 @@ jobs:
         run: |
           # Check if this version already exists on crates.io
           HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "User-Agent: wavs-wasi-ci (https://github.com/Lay3rLabs/wavs-wasi)" \
             https://crates.io/api/v1/crates/${{ env.CRATE_NAME }}/${{ steps.version.outputs.version }})
 
           if [ "$HTTP_STATUS" = "200" ]; then
