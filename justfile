@@ -7,11 +7,17 @@ wit-clean:
     rm -f wit-definitions/types/wavs:types@*.wasm
     rm -f wit-definitions/worker/wavs:worker@*.wasm
 
-wit-build:
-    just wit-clean
-    cd wit-definitions/types && wkg wit build
-    cd wit-definitions/worker && wkg wit build
+wit-build config="":
+    just inner-wit-build "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
 
-wit-publish:
-    wkg publish wit-definitions/types/wavs:types@0.5.0-alpha.3.wasm
-    wkg publish wit-definitions/worker/wavs:worker@0.5.0-alpha.3.wasm
+wit-publish config="":
+    just inner-wit-publish "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
+
+inner-wit-build config-arg:
+    just wit-clean
+    cd wit-definitions/types && wkg wit build{{config-arg}}
+    cd wit-definitions/worker && wkg wit build{{config-arg}}
+
+inner-wit-publish config-arg:
+    wkg publish wit-definitions/types/wavs:types@*.wasm{{config-arg}}
+    wkg publish wit-definitions/worker/wavs:worker@*.wasm{{config-arg}}

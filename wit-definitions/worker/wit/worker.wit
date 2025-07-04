@@ -1,4 +1,4 @@
-package wavs:worker@0.5.0-alpha.3;
+package wavs:worker@0.5.0-alpha.7;
 
 use wasi:io/poll@0.2.0;
 use wasi:clocks/monotonic-clock@0.2.0;
@@ -7,8 +7,8 @@ use wasi:io/streams@0.2.0;
 use wasi:http/types@0.2.0 as http-types;
 use wasi:http/outgoing-handler@0.2.0 as http-outgoing-handler;
 
-use wavs:types/core@0.5.0-alpha.3 as core-types;
-use wavs:types/service@0.5.0-alpha.3 as service-types;
+use wavs:types/core@0.5.0-alpha.7 as core-types;
+use wavs:types/service@0.5.0-alpha.7 as service-types;
 
 world wavs-world {
   // includes and imports for golang support
@@ -27,11 +27,10 @@ world wavs-world {
 
     log: func(level: log-level, message: string);
 
-    get-service: func(service-id: option<service-id>) -> option<service>;
-
-    get-workflow-id: func() -> option<workflow-id>;
-
-    get-workflow: func(ids: option<tuple<service-id, workflow-id>>) -> option<workflow>;
+    // gets the service and workflow id that called this component 
+    // this will be none if the component was not called by a service or the service was removed
+    // by the time the component called this function 
+    get-service: func() -> option<tuple<service, workflow-id>>;
   }
 
   use core-types.{trigger-action, wasm-response};
