@@ -2,8 +2,8 @@ name: Publish Tag
 
 on:
   push:
-    tags:
-      - "v*"
+    # tags:
+    #   - "v*"
 
 env:
   CRATE_NAME: wavs-wasi-utils
@@ -77,8 +77,8 @@ jobs:
           command: publish
           args: --manifest-path ${{ env.CRATE_PATH }}/Cargo.toml
 
-  publish_wasm:
-    name: Publish WASM to wa.dev
+  publish_wit:
+    name: Publish WIT to wa.dev
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repo
