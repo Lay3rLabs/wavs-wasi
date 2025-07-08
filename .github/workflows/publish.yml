@@ -95,7 +95,7 @@ jobs:
       - name: Install wkg
         uses: taiki-e/install-action@v2
         with:
-          tool: wkg
+          tool: wkg@0.10.0
 
       - name: Install just
         uses: taiki-e/install-action@v2
