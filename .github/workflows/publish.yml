@@ -93,7 +93,7 @@ jobs:
           override: true
 
       - name: Install wkg
-        run: cargo install wkg
+        uses: taiki-e/install-action@wkg
 
       - name: Install just
         uses: taiki-e/install-action@just
