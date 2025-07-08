@@ -4,7 +4,7 @@ resolver = "2"
 
 [workspace.package]
 edition = "2021"
-version = "0.5.0-alpha.14"
+version = "0.5.0-alpha.15"
 license = "MIT"
 authors = ["Lay3r Labs Team"]
 repository = "https://github.com/Lay3rLabs/WAVS-WASI"
@@ -16,19 +16,19 @@ serde_json = "1.0.140"
 anyhow = "1.0.98"
 wstd = "0.5.3"
 wasi = "0.14.2"
-wit-bindgen-rt = { version = "0.42.1", features = ["bitflags", "async"] }
-alloy-primitives = { version = "1.1.0", features = ["serde"] }
-alloy-sol-types = "1.1.0"
-alloy-json-rpc = "0.15.10"
-alloy-provider = "0.15.10"
-alloy-transport-http = "0.15.10"
-alloy-transport = "0.15.10"
-alloy-rpc-client = "0.15.10"
-cfg-if = "1.0.0"
+wit-bindgen-rt = { version = "0.43.0", features = ["bitflags", "async"] }
+alloy-primitives = { version = "1.1.3", features = ["serde"] }
+alloy-sol-types = "1.1.3"
+alloy-json-rpc = "1.0.9"
+alloy-provider = "1.0.9"
+alloy-transport-http = "1.0.9"
+alloy-transport = "1.0.9"
+alloy-rpc-client = "1.0.9"
+cfg-if = "1.0.1"
 tower-service = "0.3.3"
 futures-utils-wasm = "0.1.0"
 http = "1.3.1"
-wasmtime = { version = "32.0.0", features = [
+wasmtime = { version = "33.0.1", features = [
     "cache",
     "component-model",
     "runtime",
