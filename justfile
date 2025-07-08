@@ -11,7 +11,7 @@ wit-build config="":
     just inner-wit-build "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
 
 wit-publish config="":
-    just inner-wit-publish "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
+    just inner-wit-publish "{{ if config != '' { ' --config ' + config } else { '' } }}"
 
 inner-wit-build config-arg:
     just wit-clean
