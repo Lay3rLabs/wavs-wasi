@@ -11,6 +11,7 @@ env:
 
 jobs:
   publish_crate:
+    if: false
     name: Verify and Publish Crate
     runs-on: ubuntu-latest
     steps:
