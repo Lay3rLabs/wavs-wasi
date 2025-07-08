@@ -19,8 +19,8 @@ inner-wit-build config-arg:
     cd wit-definitions/worker && wkg wit build{{config-arg}}
 
 inner-wit-publish config-arg:
-    wkg publish wit-definitions/types/wavs:types@*.wasm{{config-arg}}
-    wkg publish wit-definitions/worker/wavs:worker@*.wasm{{config-arg}}
+    cd wit-definitions/types && wkg publish wavs:types@*.wasm{{config-arg}}
+    cd wit-definitions/worker && wkg publish wavs:worker@*.wasm{{config-arg}}
 
 cargo-check:
     cd packages/wavs-wasi-utils && cargo check --all-targets --all-features
