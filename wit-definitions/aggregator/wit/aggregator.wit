@@ -4,28 +4,6 @@ use wavs:types/core@0.6.0-alpha.1 as core-types;
 use wavs:types/service@0.6.0-alpha.1 as service-types;
 use wavs:types/chain@0.6.0-alpha.1 as chain-types;
 
-interface helpers {
-    use service-types.{service, workflow, workflow-id};
-
-    variant log-level {
-        error,
-        warn,
-        info,
-        debug,
-        trace
-    }
-
-    record service-and-workflow-id {
-        service: service,
-        workflow-id: workflow-id
-    }
-
-    record workflow-and-workflow-id {
-        workflow: workflow,
-        workflow-id: workflow-id
-    }
-}
-
 interface aggregator {
     use service-types.{service, workflow-id};
     use chain-types.{chain-name, evm-address};
@@ -79,7 +57,7 @@ world aggregator-world {
 
     import host: interface {
         use chain-types.{evm-chain-config, cosmos-chain-config};
-        use helpers.{log-level};
+        use core-types.{log-level};
 
         get-evm-chain-config: func(chain-name: string) -> option<evm-chain-config>;
         get-cosmos-chain-config: func(chain-name: string) -> option<cosmos-chain-config>;
