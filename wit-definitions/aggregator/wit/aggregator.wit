@@ -1,8 +1,8 @@
-package wavs:aggregator@0.6.0-alpha.1;
+package wavs:aggregator@0.6.0-alpha.2;
 
-use wavs:types/core@0.6.0-alpha.1 as core-types;
-use wavs:types/service@0.6.0-alpha.1 as service-types;
-use wavs:types/chain@0.6.0-alpha.1 as chain-types;
+use wavs:types/core@0.6.0-alpha.2 as core-types;
+use wavs:types/service@0.6.0-alpha.2 as service-types;
+use wavs:types/chain@0.6.0-alpha.2 as chain-types;
 
 interface aggregator {
     use service-types.{service, workflow-id};
