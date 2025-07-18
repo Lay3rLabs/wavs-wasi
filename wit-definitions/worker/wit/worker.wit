@@ -7,7 +7,7 @@ use wavs:types/chain@0.6.0-alpha.2 as chain-types;
 interface input {
     use core-types.{timestamp};
     use service-types.{service-id, workflow-id, trigger};
-    use chain-types.{chain-name, evm-address, evm-event-log, cosmos-address, cosmos-event, tx-hash};
+    use chain-types.{chain-name, evm-address, evm-event-log, cosmos-address, cosmos-event, cosmos-tx-hash};
 
     record trigger-action {
         config: trigger-config,
@@ -29,7 +29,6 @@ interface input {
     }
 
     record trigger-data-evm-contract-event {
-        contract-address: evm-address,
         chain-name: chain-name,
         log: evm-event-log,
     }
@@ -38,7 +37,7 @@ interface input {
         contract-address: cosmos-address,
         chain-name: chain-name,
         event: cosmos-event,
-        tx-hash: tx-hash,
+        tx-hash: cosmos-tx-hash,
         block-height: u64
     }
 
