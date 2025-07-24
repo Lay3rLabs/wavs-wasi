@@ -74,5 +74,5 @@ world aggregator-world {
 
     export handle-timer-callback: func(packet: packet) -> result<list<aggregator-action>, string>;
 
-    export handle-submit-callback: func(packet: packet, tx-result: result<any-tx-hash, string>) -> result<list<u8>, string>;
+    export handle-submit-callback: func(packet: packet, tx-result: result<any-tx-hash, string>) -> result<tuple<>, string>;
 }
