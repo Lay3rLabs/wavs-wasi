@@ -82,6 +82,7 @@ interface service {
     variant trigger {
         evm-contract-event(trigger-evm-contract-event),
         cosmos-contract-event(trigger-cosmos-contract-event),
+        svm-program-event(trigger-svm-program-event),
         block-interval(trigger-block-interval),
         cron(trigger-cron),
         manual
@@ -95,6 +96,12 @@ interface service {
 
     record trigger-cosmos-contract-event {
         address: cosmos-address,
+        chain-name: chain-name,
+        event-type: string
+    }
+
+    record trigger-svm-program-event {
+        address: string,
         chain-name: chain-name,
         event-type: string
     }

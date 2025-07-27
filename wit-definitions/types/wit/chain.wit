@@ -3,9 +3,12 @@ interface chain {
     type evm-tx-hash = list<u8>; // 32 bytes, a keccak hash of an RLP encoded signed transaction
     type cosmos-tx-hash = string;
 
+    type svm-tx-signature = string; // Base58-encoded transaction signature
+
     variant any-tx-hash {
         evm(evm-tx-hash),
         cosmos(cosmos-tx-hash),
+        svm(svm-tx-signature),
     }
 
     record cosmos-address {
@@ -31,6 +34,17 @@ interface chain {
 
     record evm-address {
         raw-bytes: list<u8>
+    }
+
+    record svm-address {
+        pubkey: string // Base58-encoded public key (32 bytes)
+    }
+
+    record svm-program-event {
+        program-id: svm-address,
+        instruction-data: list<u8>,
+        accounts: list<svm-address>,
+        logs: list<string>
     }
 
     // The overall idea is to map alloy_rpc_types_eth::Log<LogData>
@@ -61,5 +75,11 @@ interface chain {
         chain-id: string,
         ws-endpoint: option<string>,
         http-endpoint: option<string>,
+    }
+
+    record svm-chain-config {
+        cluster: string, // mainnet-beta, testnet, devnet
+        rpc-endpoint: option<string>,
+        ws-endpoint: option<string>,
     }
 }
