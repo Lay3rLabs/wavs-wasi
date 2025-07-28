@@ -26,5 +26,4 @@ Cargo.lock
 # final wit builds
 *.wasm
 
-wit-definitions/aggregator/wit/deps
-wit-definitions/worker/wit/deps
+wit-definitions/*/wit/deps
