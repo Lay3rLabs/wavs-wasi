@@ -23,6 +23,7 @@ interface service {
 
     variant service-manager {
         evm(evm-manager),
+        cosmos(cosmos-manager),
     }
 
     record evm-manager {
@@ -30,6 +31,10 @@ interface service {
         address: evm-address,
     }
 
+    record cosmos-manager {
+        chain-name: chain-name,
+        address: cosmos-address,
+    }
 
     // Workflow types
     record workflow {
