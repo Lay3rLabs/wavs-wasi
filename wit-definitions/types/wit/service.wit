@@ -123,16 +123,18 @@ interface service {
         url: string,        
         component: option<component>,
         evm-contracts: option<list<evm-contract-submission>>,
-    }
-
-    // Aggregator types
-    variant aggregator {
-        evm(evm-contract-submission),
+        cosmos-contracts: option<list<cosmos-contract-submission>>,
     }
 
     record evm-contract-submission {
         chain-name: chain-name,
         address: evm-address,
+        max-gas: option<u64>,
+    }
+
+    record cosmos-contract-submission {
+        chain-name: chain-name,
+        address: cosmos-address,
         max-gas: option<u64>,
     }
 
