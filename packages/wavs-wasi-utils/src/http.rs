@@ -33,7 +33,7 @@ pub fn http_request_post_form(
         if !body.is_empty() {
             body += "&";
         }
-        body += &format!("{}={}\n", key, value);
+        body += &format!("{key}={value}\n");
     }
 
     Ok(Request::post(url)
