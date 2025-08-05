@@ -17,10 +17,12 @@ inner-wit-build config-arg:
     just wit-clean
     cd wit-definitions/types && wkg wit build{{config-arg}}
     cd wit-definitions/worker && wkg wit build{{config-arg}}
+    cd wit-definitions/aggregator && wkg wit build{{config-arg}}
 
 inner-wit-publish config-arg:
     cd wit-definitions/types && wkg publish wavs:types@*.wasm{{config-arg}}
     cd wit-definitions/worker && wkg publish wavs:worker@*.wasm{{config-arg}}
+    cd wit-definitions/aggregator && wkg publish wavs:aggregator@*.wasm{{config-arg}}
 
 cargo-check:
     cd packages/wavs-wasi-utils && cargo check --all-targets --all-features
