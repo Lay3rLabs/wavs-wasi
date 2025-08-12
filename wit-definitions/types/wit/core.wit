@@ -5,8 +5,8 @@ interface core {
     nanos: u64
   }
 
-  variant duration {
-    secs(u64)
+  record duration {
+    secs: u64
   }
 
   variant log-level {
