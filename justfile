@@ -5,7 +5,7 @@ lint:
 
 wit-clean:
     rm -f wit-definitions/types/wavs:types@*.wasm
-    rm -f wit-definitions/worker/wavs:worker@*.wasm
+    rm -f wit-definitions/operator/wavs:operator@*.wasm
 
 wit-build config="":
     just inner-wit-build "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
@@ -16,12 +16,12 @@ wit-publish config="":
 inner-wit-build config-arg:
     just wit-clean
     cd wit-definitions/types && wkg wit build{{config-arg}}
-    cd wit-definitions/worker && wkg wit build{{config-arg}}
+    cd wit-definitions/operator && wkg wit build{{config-arg}}
     cd wit-definitions/aggregator && wkg wit build{{config-arg}}
 
 inner-wit-publish config-arg:
     cd wit-definitions/types && wkg publish wavs:types@*.wasm{{config-arg}}
-    cd wit-definitions/worker && wkg publish wavs:worker@*.wasm{{config-arg}}
+    cd wit-definitions/operator && wkg publish wavs:operator@*.wasm{{config-arg}}
     cd wit-definitions/aggregator && wkg publish wavs:aggregator@*.wasm{{config-arg}}
 
 cargo-check:

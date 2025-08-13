@@ -6,7 +6,7 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// Exports represents the caller-defined exports from "wavs:worker/layer-trigger-world@0.4.0-beta.4".
+// Exports represents the caller-defined exports from "wavs:operator/layer-trigger-world@0.4.0-beta.4".
 var Exports struct {
 	// Run represents the caller-defined, exported function "run".
 	//
