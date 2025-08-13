@@ -27,7 +27,7 @@ inner-wit-publish config-arg:
 cargo-check:
     cd packages/wavs-wasi-utils && cargo check --all-targets --all-features
 
-# Update version in all necessary files
+# Update version in all necessary files (eg. just set-tag v0.6.0-alpha.7)
 set-tag version:
     #!/usr/bin/env bash
     set -euo pipefail
@@ -51,7 +51,7 @@ set-tag version:
 
     echo "Version updated to ${VERSION} in all files"
 
-# Tag the repository with both main tag and go module tag
+# Create and push git tags for Rust and go module (eg. just push-tag v0.6.0-alpha.7)
 push-tag version:
     #!/usr/bin/env bash
     set -euo pipefail
