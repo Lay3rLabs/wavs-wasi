@@ -26,3 +26,65 @@ inner-wit-publish config-arg:
 
 cargo-check:
     cd packages/wavs-wasi-utils && cargo check --all-targets --all-features
+
+# Update version in all necessary files
+set-tag version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Ensure version doesn't start with 'v' for file updates
+    if [[ "{{version}}" == v* ]]; then
+        VERSION="${{version}#v}"
+    else
+        VERSION="{{version}}"
+    fi
+
+    echo "Setting version to: ${VERSION}"
+
+    # Cargo.toml
+    sed -i "s/^version = \".*\"/version = \"${VERSION}\"/" Cargo.toml
+
+    # all WIT packages
+    find wit-definitions -name "*.wit" -type f | while read -r file; do
+        sed -i "s/^package wavs:\([^@]*\)@.*/package wavs:\1@${VERSION};/" "$file"
+        sed -i "s|use wavs:types/\([^@]*\)@[^[:space:]]*|use wavs:types/\1@${VERSION}|g" "$file"
+    done
+
+    echo "Version updated to ${VERSION} in all files"
+
+# Tag the repository with both main tag and go module tag
+push-tag version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Ensure version starts with 'v'
+    if [[ "{{version}}" != v* ]]; then
+        TAG="v{{version}}"
+    else
+        TAG="{{version}}"
+    fi
+
+    GO_TAG="go/${TAG}"
+
+    echo "Creating tags: ${TAG} and ${GO_TAG}"
+
+    # check if main tag already exists
+    if git rev-parse "${TAG}" >/dev/null 2>&1; then
+        echo "Error: Tag ${TAG} already exists"
+        exit 1
+    fi
+
+    # check if go tag already exists
+    if git rev-parse "${GO_TAG}" >/dev/null 2>&1; then
+        echo "Error: Tag ${GO_TAG} already exists"
+        exit 1
+    fi
+
+    git tag "${TAG}" -m "Release ${TAG}"
+    git tag "${GO_TAG}" -m "Go module release ${TAG}"
+
+    echo "Pushing tags to origin..."
+    git push origin "${TAG}"
+    git push origin "${GO_TAG}"
+
+    echo "Successfully created and pushed tags: ${TAG} and ${GO_TAG}"
