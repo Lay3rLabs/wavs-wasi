@@ -33,10 +33,9 @@ set-tag version:
     set -euo pipefail
 
     # Ensure version doesn't start with 'v' for file updates
-    if [[ "{{version}}" == v* ]]; then
-        VERSION="${{version}#v}"
-    else
-        VERSION="{{version}}"
+    VERSION="{{version}}"
+    if [[ "$VERSION" == v* ]]; then
+        VERSION="${VERSION#v}"
     fi
 
     echo "Setting version to: ${VERSION}"
