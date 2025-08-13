@@ -6,7 +6,7 @@ import (
 	"go.bytecodealliance.org/cm"
 )
 
-// This file contains wasmimport and wasmexport declarations for "wavs:worker@0.4.0-beta.4".
+// This file contains wasmimport and wasmexport declarations for "wavs:operator@0.4.0-beta.4".
 
 //go:wasmexport run
 //export run
