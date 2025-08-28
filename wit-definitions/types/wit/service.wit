@@ -23,7 +23,6 @@ interface service {
 
     variant service-manager {
         evm(evm-manager),
-        cosmos(cosmos-manager),
         svm(svm-manager),
     }
 
