@@ -23,18 +23,11 @@ interface service {
 
     variant service-manager {
         evm(evm-manager),
-        svm(svm-manager),
     }
 
     record evm-manager {
         chain-name: chain-name,
         address: evm-address,
-    }
-
-
-    record svm-manager {
-        chain-name: chain-name,
-        address: svm-address,
     }
 
     // Workflow types
