@@ -6,7 +6,7 @@ use wavs:types/chain@0.6.0-alpha.10 as chain-types;
 
 interface aggregator {
     use core-types.{duration};
-    use service-types.{service, workflow-id};
+    use service-types.{service, workflow-id, signature-prefix};
     use chain-types.{chain-key, evm-address};
 
     record envelope {
@@ -16,7 +16,8 @@ interface aggregator {
     }
 
     record secp256k1-signature {
-        signature-data: list<u8>,
+        signature: list<u8>,
+        prefix: option<signature-prefix>,
     }
 
     variant envelope-signature {
