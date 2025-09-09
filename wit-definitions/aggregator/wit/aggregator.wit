@@ -39,13 +39,7 @@ interface aggregator {
     record submit-action {
         chain: chain-key,
         contract-address: evm-address,
-        gas-cost: option<gas-info>,
-    }
-
-    record gas-info {
-        gas-limit: u64,
-        gas-price: u64,
-        estimated-cost: u64,
+        gas-price: option<u64>,
     }
 }
 
