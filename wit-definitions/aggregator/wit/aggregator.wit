@@ -25,6 +25,7 @@ interface aggregator {
         workflow-id: workflow-id,
         envelope: envelope,
         signature: envelope-signature,
+        origin-tx-hash: list<u8>, // the tx hash from the original transaction that triggered this workflow (used for reorg handling)
     }
 
     variant aggregator-action {
