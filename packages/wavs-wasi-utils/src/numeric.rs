@@ -10,7 +10,7 @@ macro_rules! impl_u128_conversions {
     ($wit_type:ty) => {
         impl From<u128> for $wit_type {
             fn from(value: u128) -> Self {
-                let low = value as u64; // Rust guarantees this is truncating to the least signifcant/lower 64 bits
+                let low = value as u64; // Rust guarantees this is truncating to the least significant/lower 64 bits
                 let high = (value >> 64) as u64;
                 Self { value: (high, low) }
             }
