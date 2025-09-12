@@ -10,15 +10,15 @@ macro_rules! impl_u128_conversions {
     ($wit_type:ty) => {
         impl From<u128> for $wit_type {
             fn from(value: u128) -> Self {
-                let low = value as u64;
+                let low = value as u64; // Rust guarantees this is truncating to the lower 64 bits
                 let high = (value >> 64) as u64;
-                Self { value: (low, high) }
+                Self { value: (high, low) }
             }
         }
 
         impl From<$wit_type> for u128 {
             fn from(wrapper: $wit_type) -> Self {
-                let (low, high) = wrapper.value;
+                let (high, low) = wrapper.value;
                 ((high as u128) << 64) | (low as u128)
             }
         }
@@ -42,7 +42,7 @@ mod tests {
     //
     // so, instead, for this case it's easy to see what the generated type would look like and just define it here
 
-    #[derive(Debug, PartialEq)]
+    #[derive(Debug, PartialEq, Copy, Clone)]
     struct FakeU128 {
         value: (u64, u64),
     }
@@ -50,7 +50,7 @@ mod tests {
     impl_u128_conversions!(FakeU128);
 
     #[test]
-    fn test_u128_conversion() {
+    fn test_u128_conversion_max() {
         let original: u128 = u128::MAX;
         let wit_repr: FakeU128 = original.into();
         assert_eq!(
@@ -60,6 +60,14 @@ mod tests {
             }
         );
         let converted_back: u128 = wit_repr.into();
+        assert_eq!(original, converted_back);
+    }
+
+    #[test]
+    fn test_u128_conversion_endianness() {
+        let original = FakeU128 { value: (1, 2) };
+        let converted: u128 = original.into();
+        let converted_back = FakeU128::from(converted);
         assert_eq!(original, converted_back);
     }
 }
