@@ -65,9 +65,64 @@ mod tests {
 
     #[test]
     fn test_u128_conversion_endianness() {
-        let original = FakeU128 { value: (1, 2) };
-        let converted: u128 = original.into();
-        let converted_back = FakeU128::from(converted);
-        assert_eq!(original, converted_back);
+        // Test various bit patterns to ensure correct endianness handling
+        let test_cases = [
+            // Simple cases
+            0u128,
+            1u128,
+            u64::MAX as u128,         // Only lower 64 bits set
+            (u64::MAX as u128) << 64, // Only upper 64 bits set
+            u128::MAX,
+            // Specific bit patterns to test endianness
+            0x0123456789ABCDEF_FEDCBA9876543210u128,
+            0xFFFFFFFF00000000_00000000FFFFFFFFu128,
+            0x0000000000000001_0000000000000000u128, // Bit 64 set
+            0x8000000000000000_0000000000000000u128, // MSB set
+            0x0000000000000000_8000000000000000u128, // Bit 63 set
+        ];
+
+        for &test_value in &test_cases {
+            // Manual bit extraction (what the macro should do)
+            let manual_low = test_value as u64; // Truncate to get lower 64 bits
+            let manual_high = (test_value >> 64) as u64; // Shift right to get upper 64 bits
+
+            // Use the macro to convert u128 -> WIT type
+            let wit_value: FakeU128 = test_value.into();
+
+            // Verify the macro extracted bits correctly
+            assert_eq!(
+                wit_value.value.0, manual_low,
+                "Lower bits mismatch for {:#034x}. Expected: {:#018x}, Got: {:#018x}",
+                test_value, manual_low, wit_value.value.0
+            );
+            assert_eq!(
+                wit_value.value.1, manual_high,
+                "Upper bits mismatch for {:#034x}. Expected: {:#018x}, Got: {:#018x}",
+                test_value, manual_high, wit_value.value.1
+            );
+
+            // Manual bit reconstruction (what the reverse macro should do)
+            let manual_reconstructed = ((manual_high as u128) << 64) | (manual_low as u128);
+
+            // Use the macro to convert WIT type -> u128
+            let macro_reconstructed: u128 = wit_value.into();
+
+            // Verify both manual and macro reconstruction match original
+            assert_eq!(
+                manual_reconstructed, test_value,
+                "Manual reconstruction failed for {:#034x}",
+                test_value
+            );
+            assert_eq!(
+                macro_reconstructed, test_value,
+                "Macro reconstruction failed for {:#034x}",
+                test_value
+            );
+            assert_eq!(
+                manual_reconstructed, macro_reconstructed,
+                "Manual and macro reconstruction disagree for {:#034x}",
+                test_value
+            );
+        }
     }
 }
