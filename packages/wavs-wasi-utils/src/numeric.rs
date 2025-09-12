@@ -1,3 +1,10 @@
+/// Macro to convert between Rust's native u128 and WIT tuple<u64, u64> representation.
+///
+/// Usage:
+///   impl_u128_conversions!(my_bindings::exports::my_interface::U128);
+///
+/// This will implement From traits for bidirectional conversion between
+/// the WIT-generated tuple type and Rust's native u128.
 #[macro_export]
 macro_rules! impl_u128_conversions {
     ($wit_type:ty) => {
