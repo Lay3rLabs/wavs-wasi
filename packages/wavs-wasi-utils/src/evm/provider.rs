@@ -19,7 +19,6 @@ use alloy_transport_http::{Http, HttpConnect};
 use futures_utils_wasm::impl_future;
 use tower_service::Service;
 use wasi::http::types::Method;
-use wit_bindgen_rt::async_support::futures::pin_mut;
 use wstd::{
     http::{Client, IntoBody, Request, StatusCode},
     io::{empty, AsyncRead},
