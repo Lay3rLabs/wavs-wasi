@@ -1,26 +1,26 @@
-/// Macro to convert between Rust's native u128 and WIT tuple<u64, u64> representation.
-///
-/// Usage:
-///   impl_u128_conversions!(my_bindings::exports::my_interface::U128);
-///
-/// This will implement From traits for bidirectional conversion between
-/// the WIT-generated tuple type and Rust's native u128.
-#[macro_export]
-macro_rules! impl_u128_conversions {
-    ($wit_type:ty) => {
-        impl From<u128> for $wit_type {
-            fn from(value: u128) -> Self {
-                let low = value as u64;
-                let high = (value >> 64) as u64;
-                (low, high)
-            }
-        }
+/// Convert a Rust u128 to WIT u128 representation (tuple<u64, u64>)
+pub fn u128_to_wit(value: u128) -> (u64, u64) {
+    let low = value as u64;
+    let high = (value >> 64) as u64;
+    (low, high)
+}
 
-        impl From<$wit_type> for u128 {
-            fn from(value: $wit_type) -> Self {
-                let (low, high) = value;
-                ((high as u128) << 64) | (low as u128)
-            }
-        }
-    };
+/// Convert a WIT u128 representation (tuple<u64, u64>) to Rust u128
+pub fn wit_to_u128(value: (u64, u64)) -> u128 {
+    let (low, high) = value;
+    ((high as u128) << 64) | (low as u128)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_u128_conversion() {
+        let original: u128 = u128::MAX;
+        let wit_repr = u128_to_wit(original);
+        assert_eq!(wit_repr, (u64::MAX, u64::MAX));
+        let converted_back = wit_to_u128(wit_repr);
+        assert_eq!(original, converted_back);
+    }
 }
