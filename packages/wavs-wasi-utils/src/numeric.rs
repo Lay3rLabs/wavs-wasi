@@ -12,13 +12,13 @@ macro_rules! impl_u128_conversions {
             fn from(value: u128) -> Self {
                 let low = value as u64; // Rust guarantees this is truncating to the least significant/lower 64 bits
                 let high = (value >> 64) as u64;
-                Self { value: (high, low) }
+                Self { value: (low, high) }
             }
         }
 
         impl From<$wit_type> for u128 {
             fn from(wrapper: $wit_type) -> Self {
-                let (high, low) = wrapper.value;
+                let (low, high) = wrapper.value;
                 ((high as u128) << 64) | (low as u128)
             }
         }
