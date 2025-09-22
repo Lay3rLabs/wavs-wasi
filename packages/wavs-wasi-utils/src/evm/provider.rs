@@ -9,7 +9,6 @@ use std::{
 };
 
 use alloy_json_rpc::{RequestPacket, ResponsePacket};
-use alloy_network::primitives::HeaderResponse;
 use alloy_primitives::BlockHash;
 use alloy_provider::{
     network::{BlockResponse, Ethereum},
@@ -36,11 +35,6 @@ cfg_if::cfg_if! {
             let client = WasiEvmClient::new(endpoint);
             let is_local = client.is_local();
             RootProvider::new(RpcClient::new(client, is_local))
-        }
-
-        pub async fn get_block_timestamp<Ethereum>(provider: RootProvider, block_hash: BlockHash) -> Result<u64, String> {
-            let block = provider.get_block_by_hash(block_hash).await.map_err(|e| format!("Error querying block from block hash ({block_hash}):{e}"))?.ok_or(format!("No block found for block hash ({block_hash})"))?;
-            Ok(block.header().timestamp)
         }
 
         #[derive(Clone)]
