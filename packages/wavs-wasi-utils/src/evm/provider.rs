@@ -9,7 +9,12 @@ use std::{
 };
 
 use alloy_json_rpc::{RequestPacket, ResponsePacket};
-use alloy_provider::{network::Ethereum, Network, Provider, RootProvider};
+use alloy_network::primitives::HeaderResponse;
+use alloy_primitives::BlockHash;
+use alloy_provider::{
+    network::{BlockResponse, Ethereum},
+    Network, Provider, RootProvider,
+};
 use alloy_rpc_client::RpcClient;
 use alloy_transport::{
     utils::guess_local_url, BoxTransport, Pbf, TransportConnect, TransportError,
@@ -31,6 +36,11 @@ cfg_if::cfg_if! {
             let client = WasiEvmClient::new(endpoint);
             let is_local = client.is_local();
             RootProvider::new(RpcClient::new(client, is_local))
+        }
+
+        pub async fn get_block_timestamp<Ethereum>(provider: RootProvider, block_hash: BlockHash) -> Result<u64, String> {
+            let block = provider.get_block_by_hash(block_hash).await.map_err(|e| format!("Error querying block from block hash ({block_hash}):{e}"))?.ok_or(format!("No block found for block hash ({block_hash})"))?;
+            Ok(block.header().timestamp)
         }
 
         #[derive(Clone)]
@@ -98,6 +108,10 @@ cfg_if::cfg_if! {
     } else {
         // not used, just for making the compiler happy
         pub fn new_evm_provider<N: Network>(_endpoint: String) -> RootProvider {
+            unimplemented!()
+        }
+
+        pub async fn get_block_timestamp<Ethereum>(_provider: RootProvider, _block_hash: BlockHash) -> Result<u64, String> {
             unimplemented!()
         }
     }
