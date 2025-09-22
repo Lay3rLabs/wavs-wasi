@@ -9,7 +9,11 @@ use std::{
 };
 
 use alloy_json_rpc::{RequestPacket, ResponsePacket};
-use alloy_provider::{network::Ethereum, Network, Provider, RootProvider};
+use alloy_primitives::BlockHash;
+use alloy_provider::{
+    network::{BlockResponse, Ethereum},
+    Network, Provider, RootProvider,
+};
 use alloy_rpc_client::RpcClient;
 use alloy_transport::{
     utils::guess_local_url, BoxTransport, Pbf, TransportConnect, TransportError,
@@ -100,5 +104,6 @@ cfg_if::cfg_if! {
         pub fn new_evm_provider<N: Network>(_endpoint: String) -> RootProvider {
             unimplemented!()
         }
+
     }
 }
