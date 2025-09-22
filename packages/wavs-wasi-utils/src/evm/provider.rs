@@ -111,8 +111,5 @@ cfg_if::cfg_if! {
             unimplemented!()
         }
 
-        pub async fn get_block_timestamp<Ethereum>(_provider: RootProvider, _block_hash: BlockHash) -> Result<u64, String> {
-            unimplemented!()
-        }
     }
 }
