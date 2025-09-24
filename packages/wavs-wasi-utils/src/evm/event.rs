@@ -26,7 +26,7 @@ macro_rules! decode_event_log_data {
 }
 
 use alloy_primitives::{Bytes, FixedBytes, LogData};
-use anyhow::{anyhow, Result};
+use anyhow::{anyhow, ensure, Result};
 
 pub fn decode_event_log_data_raw<T: alloy_sol_types::SolEvent>(
     topics: Vec<FixedBytes<32>>,
@@ -38,8 +38,20 @@ pub fn decode_event_log_data_raw<T: alloy_sol_types::SolEvent>(
     T::decode_log_data(&log_data).map_err(|e| anyhow!("failed to decode event: {}", e))
 }
 
+pub fn try_into_fixed_bytes<const N: usize>(vec: Vec<u8>) -> Result<FixedBytes<N>> {
+    ensure!(
+        vec.len() == N,
+        "Vec<u8> has wrong length: expected {N}, got {}",
+        vec.len()
+    );
+
+    let array: [u8; N] = vec.as_slice().try_into()?;
+    Ok(array.into())
+}
+
 #[cfg(test)]
 mod tests {
+    use alloy_primitives::FixedBytes;
     use alloy_primitives::U256;
     use alloy_sol_types::sol;
     use alloy_sol_types::SolEvent;
@@ -83,5 +95,23 @@ mod tests {
         assert_eq!(decoded_event.id, id);
         assert_eq!(decoded_event.user.0, user);
         assert_eq!(decoded_event.amount, amount);
+    }
+
+    #[test]
+    fn test_try_into_fixed_bytes_success() {
+        let vec = vec![0x11u8; 32];
+        let result = super::try_into_fixed_bytes::<32>(vec).unwrap();
+        assert_eq!(result, FixedBytes::from_slice(&[0x11u8; 32]));
+    }
+
+    #[test]
+    fn test_try_into_fixed_bytes_failure_wrong_length() {
+        let vec = vec![0x11u8; 31];
+        let result = super::try_into_fixed_bytes::<32>(vec);
+        assert!(result.is_err());
+        assert!(result
+            .unwrap_err()
+            .to_string()
+            .contains("Vec<u8> has wrong length"));
     }
 }
