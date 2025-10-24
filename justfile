@@ -41,18 +41,18 @@ set-tag version:
     echo "Setting version to: ${VERSION}"
 
     if command -v gsed >/dev/null 2>&1; then
-        SED_INPLACE=("gsed" "-i")
+        SED_CMD="gsed -i"
     else
-        SED_INPLACE=("sed" "-i" "")
+        SED_CMD="sed -i"
     fi
 
     # Cargo.toml
-    "${SED_INPLACE[@]}" "s/^version = \".*\"/version = \"${VERSION}\"/" Cargo.toml
+    $SED_CMD 's/^version = ".*"/version = "'"${VERSION}"'"/' Cargo.toml
 
     # all WIT packages
     find wit-definitions -name "*.wit" -type f | while read -r file; do
-        "${SED_INPLACE[@]}" "s/^package wavs:\([^@]*\)@.*/package wavs:\1@${VERSION};/" "$file"
-        "${SED_INPLACE[@]}" "s|use wavs:types/\([^@]*\)@[^[:space:]]*|use wavs:types/\1@${VERSION}|g" "$file"
+        $SED_CMD 's/^package wavs:\([^@]*\)@.*/package wavs:\1@'"${VERSION}"';/' "$file"
+        $SED_CMD 's|use wavs:types/\([^@]*\)@[^[:space:]]*|use wavs:types/\1@'"${VERSION}"'|g' "$file"
     done
 
     echo "Version updated to ${VERSION} in all files"
