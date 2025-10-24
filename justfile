@@ -6,6 +6,7 @@ lint:
 wit-clean:
     rm -f wit-definitions/types/wavs:types@*.wasm
     rm -f wit-definitions/operator/wavs:operator@*.wasm
+    rm -f wit-definitions/aggregator/wavs:aggregator@*.wasm
 
 wit-build config="":
     just inner-wit-build "{{ if config != '' { ' --config ' + '../../' + config } else { '' } }}"
