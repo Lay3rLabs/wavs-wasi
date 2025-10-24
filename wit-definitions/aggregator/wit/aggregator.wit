@@ -46,13 +46,13 @@ interface aggregator {
 
     record evm-submit-action {
         chain: chain-key,
-        evm-address: evm-address,
+        address: evm-address,
         gas-price: option<u128>,
     }
 
     record cosmos-submit-action {
         chain: chain-key,
-        contract-address: cosmos-address,
+        address: cosmos-address,
         gas-price: option<u128>,
     }
 }
