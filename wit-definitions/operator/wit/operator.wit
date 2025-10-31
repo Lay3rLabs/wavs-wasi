@@ -94,5 +94,5 @@ world wavs-world {
     use input.{trigger-action};
     use output.{wasm-response};
 
-    export run: func(trigger-action: trigger-action) -> result<list<wasm-response>, string>;
+    export run: func(trigger-action: trigger-action) -> result<option<wasm-response>, string>;
 }
