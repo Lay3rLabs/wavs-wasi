@@ -26,20 +26,16 @@ interface output {
 
     variant response-event-id {
         // will be auto-generated on the host by hashing service + trigger-action + (optional) salt
-        auto(auto-event-id),
+        // the salt can be provided to ensure additional uniqueness if needed
+        // e.g. when multiple responses are generated for the same trigger-action
+        auto(option<list<u8>>),
+
         // hash any arbitrary payload to generate the event id
-        hash(hash-event-id),
-        // a raw event id provided directly
+        // it's up to you to ensure uniqueness here
+        hash(list<u8>),
+
+        // a raw event id provided directly, typically for testing purposes
         raw(event-id),
-    }
-
-    record auto-event-id {
-        salt: option<list<u8>>
-    }
-
-    record hash-event-id {
-        // arbitrary payload to be hashed to generate the event id
-        payload: list<u8>
     }
 
     record wasm-response {
