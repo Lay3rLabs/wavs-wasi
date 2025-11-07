@@ -4,6 +4,7 @@ lint:
     cargo clippy --all-targets -- -D warnings
 
 wit-clean:
+    rm -f wit-definitions/wasi-tls/*.wasm
     rm -f wit-definitions/types/wavs:types@*.wasm
     rm -f wit-definitions/operator/wavs:operator@*.wasm
     rm -f wit-definitions/aggregator/wavs:aggregator@*.wasm
@@ -16,6 +17,7 @@ wit-publish config="":
 
 inner-wit-build config-arg:
     just wit-clean
+    cd wit-definitions/wasi-tls && wkg wit build{{config-arg}}
     cd wit-definitions/types && wkg wit build{{config-arg}}
     cd wit-definitions/operator && wkg wit build{{config-arg}}
     cd wit-definitions/aggregator && wkg wit build{{config-arg}}
