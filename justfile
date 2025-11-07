@@ -28,8 +28,8 @@ inner-wit-publish config-arg:
 cargo-check:
     cd packages/wavs-wasi-utils && cargo check --all-targets --all-features
 
-# Update version in all necessary files (eg. just set-tag v0.6.0-alpha.7)
-set-tag version:
+# Update version in all necessary files (eg. just set-version v0.6.0-alpha.7)
+set-version version:
     #!/usr/bin/env bash
     set -euo pipefail
 
